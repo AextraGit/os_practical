@@ -1,0 +1,73 @@
+Get xv6:
+1. Download riscv-gnu-toolchain in a directory of your choice:
+git clone ... (link for github repo of riscv-gnu-toolchain)
+2. Download qemu:
+sudo apt install git build-essential qemu-system
+3. Download xv6 in a directory of your choice:
+git clone ... (link for github repo of xv6)
+
+Use it:
+0. Be in the general directory (/xv6)
+1. make clean (clear out all human unreadable files like binaries)
+2. make (compile the code, this will create those unreadable files)
+3. make qemu (run the os)
+
+Useful commands:
+ls - list the directory
+CTRL + a then x - shutdown the os or qemu
+
+Substitute <something> in these parentheses for something (like name or so)
+"code" in these apostrophes indicate code
+
+Add commands:
+1. Go to user directory (/xv6/user)
+2. Add a c file with the name of your new command (/xv6/user/<command_name>.c)
+3. Go to general directory (/xv6)
+4. Go into the makefile (/xv6/Makefile)
+5. Go to "UPROGS=\" (search it or should be at line 125)
+6. Add "$U/_<command_name>\" with your command name to the end of the list of commands
+
+Add system call:
+1. Go to /xv6/kernel directory
+2. Go into the syscall.h file (/xv6/kernel/syscall.h)
+3. Add your syscall to the list of syscalls in this header file with:
+"#define SYS_<syscall_name> <next_number>" (use same pattern as the other syscalls have and give it a name and the next number in the list)
+4. Go into the syscall.c file (/xv6/kernel/syscall.c)
+5. Go to line 108 or a place with a listing of syscalls in this format:
+"// An array mapping syscall numbers from syscall.h
+// to the function that handles the system call.
+static uint64 (*syscalls[])(void) = {
+[SYS_fork]    sys_fork,
+[SYS_exit]    sys_exit,
+...
+}"
+6. Add your own syscall to the end of the list in the same format as the other ones:
+"[SYS_<syscall_name>]    sys_<syscall_name>,"
+7. Go above where there are prototypes for the functions that handle system calls:
+"// Prototypes for the functions that handle system calls.
+extern uint64 sys_fork(void);
+extern uint64 sys_exit(void);"
+8. Add your own syscall to the end of it with the same format:
+"extern uint64 sys_<syscall_name>(void);"
+9. Go into the sysproc.c file (/xv6/kernel/sysproc.c)
+10. Add your system call with c code:
+"int
+sys_<syscall_name>(void)
+{
+  return 0;
+}" (something like this, except that it does something useful)
+11. Go to the user directory (/xv6/user)
+12. Go into the usys.pl file (/xv6/user/usys.pl)
+13. Go to the end of the file and add a new entry with the name of your system call to the list:
+"entry("<syscall_name>");"
+14. Go to the user.h file
+15. Add your system call to the end of the list of system calls again:
+"// system calls
+int fork(void);
+int exit(int) __attribute__((noreturn));
+int wait(int*);
+int pipe(int*);
+...
+int <syscall_name>(<some_parameters>);" (last one should be your own system call)
+
+
