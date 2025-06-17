@@ -71,3 +71,14 @@ int pipe(int*);
 int <syscall_name>(<some_parameters>);" (last one should be your own system call)
 
 
+Debugging:
+
+1. Open 2 console windows for wsl.
+2. navigate to root directory rxv6pp.
+3. Run command ninja -C meson_build qemu-debug
+4. Switch to second terminal.
+5. Enter riscv64-unknown-elf-gdb
+6. Now gdb has started. Enter "target remote :1234"
+7. Now add symbol file with the command "add-symbol-file meson_build/kernel/kernel 0x80403fbe"
+8. Assert with y
+9. Alternatively add symbol files with "add-symbol-file meson_build/kernel/kernel.p/vm.c.o 0x80400000" etc.
