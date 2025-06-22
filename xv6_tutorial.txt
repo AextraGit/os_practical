@@ -27,6 +27,9 @@ Add commands:
 5. Go to "UPROGS=\" (search it or should be at line 125)
 6. Add "$U/_<command_name>\" with your command name to the end of the list of commands
 
+In rxv6pp:
+makefile is the meson.build file, add it under userspace programs
+
 Add system call:
 1. Go to /xv6/kernel directory
 2. Go into the syscall.h file (/xv6/kernel/syscall.h)
